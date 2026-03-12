@@ -58,6 +58,45 @@ class VacancyController extends Controller
         ]);
     }
 
+    public function show(Vacancy $vacancy)
+    {
+        $vacancy->load('client');
+
+        return Inertia::render('Vacancies/Show', [
+            'vacancy' => [
+                'id'                   => $vacancy->id,
+                'title'                => $vacancy->title,
+                'confidential'         => $vacancy->confidential,
+                'department'           => $vacancy->department,
+                'staffing_unit'        => $vacancy->staffing_unit,
+                'vacancy_category'     => $vacancy->vacancy_category,
+                'region'               => $vacancy->region,
+                'status'               => $vacancy->status,
+                'opening_date'         => $vacancy->opening_date?->format('d.m.Y'),
+                'planned_closing_date' => $vacancy->planned_closing_date?->format('d.m.Y'),
+                'days_left'            => $vacancy->planned_closing_date
+                    ? (int) now()->diffInDays($vacancy->planned_closing_date, false)
+                    : null,
+                'fixed_salary'         => $vacancy->fixed_salary,
+                'average_income'       => $vacancy->average_income,
+                'work_address'         => $vacancy->work_address,
+                'mvz_code'             => $vacancy->mvz_code,
+                'work_schedule'        => $vacancy->work_schedule,
+                'opening_reason'       => $vacancy->opening_reason,
+                'special_conditions'   => $vacancy->special_conditions,
+                'requirements'         => $vacancy->requirements,
+                'description'          => $vacancy->description,
+                'comment'              => $vacancy->comment,
+                'candidate_gender'     => $vacancy->candidate_gender,
+                'donor_companies'      => $vacancy->donor_companies,
+                'interview_format'     => $vacancy->interview_format,
+                'deadline_reason'      => $vacancy->deadline_reason,
+                'reserve'              => $vacancy->reserve,
+                'client'               => $vacancy->client ? ['id' => $vacancy->client->id, 'name' => $vacancy->client->name] : null,
+            ],
+        ]);
+    }
+
     public function create()
     {
         $clients = Client::orderBy('name')->get(['id', 'name']);

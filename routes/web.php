@@ -10,3 +10,4 @@ Route::get('/', function () {
 Route::get('/vacancies', [VacancyController::class, 'index'])->name('vacancies.index');
 Route::get('/vacancies/create', [VacancyController::class, 'create'])->name('vacancies.create');
 Route::post('/vacancies', [VacancyController::class, 'store'])->name('vacancies.store');
+Route::get('/vacancies/{vacancy}', [VacancyController::class, 'show'])->name('vacancies.show');

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { router } from '@inertiajs/react';
+import { router, Link } from '@inertiajs/react';
 
 const STATUS_LABELS = {
     open:   'Открыта',
@@ -166,7 +166,7 @@ export default function VacanciesIndex({ vacancies, clients, departments, filter
                     <span>▼</span> Фильтр
                 </button>
 
-                <a href="/vacancies/create" className="btn-add" title="Создать вакансию">+</a>
+                <Link href="/vacancies/create" className="btn-add" title="Создать вакансию">+</Link>
             </div>
 
             {/* Active filter tags */}
@@ -205,7 +205,7 @@ export default function VacanciesIndex({ vacancies, clients, departments, filter
                                 <div style={{ fontSize: 48, marginBottom: 16 }}>📋</div>
                                 <div className="empty-state-title">Вакансий нет</div>
                                 <div className="empty-state-text">Добавьте первую вакансию, чтобы начать подбор.</div>
-                                <a href="/vacancies/create" className="btn-primary">+ Добавить вакансию</a>
+                                <Link href="/vacancies/create" className="btn-primary">+ Добавить вакансию</Link>
                             </div>
                         ) : (
                             <div className="table-scroll">
@@ -226,7 +226,7 @@ export default function VacanciesIndex({ vacancies, clients, departments, filter
                                             <tr key={v.id}>
                                                 {/* Название */}
                                                 <td>
-                                                    <div className="vac-name">{v.title}</div>
+                                                    <Link href={`/vacancies/${v.id}`} className="vac-name" style={{ textDecoration: 'none' }}>{v.title}</Link>
                                                     {(v.fixed_salary || v.average_income) && (
                                                         <div className="vac-sub">
                                                             {v.fixed_salary ?? '—'} / {v.average_income ?? '0'}

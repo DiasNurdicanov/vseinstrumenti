@@ -106,6 +106,83 @@ class VacancyController extends Controller
         ]);
     }
 
+    public function edit(Vacancy $vacancy)
+    {
+        $clients = Client::orderBy('name')->get(['id', 'name']);
+
+        return Inertia::render('Vacancies/Edit', [
+            'vacancy' => [
+                'id'                   => $vacancy->id,
+                'title'                => $vacancy->title,
+                'confidential'         => $vacancy->confidential,
+                'department'           => $vacancy->department,
+                'staffing_unit'        => $vacancy->staffing_unit,
+                'vacancy_category'     => $vacancy->vacancy_category,
+                'region'               => $vacancy->region,
+                'status'               => $vacancy->status,
+                'opening_date'         => $vacancy->opening_date?->format('Y-m-d'),
+                'planned_closing_date' => $vacancy->planned_closing_date?->format('Y-m-d'),
+                'planned_closing_days' => $vacancy->planned_closing_days,
+                'client_id'            => $vacancy->client_id,
+                'description'          => $vacancy->description,
+                'comment'              => $vacancy->comment,
+                'work_address'         => $vacancy->work_address,
+                'mvz_code'             => $vacancy->mvz_code,
+                'work_schedule'        => $vacancy->work_schedule,
+                'opening_reason'       => $vacancy->opening_reason,
+                'fixed_salary'         => $vacancy->fixed_salary,
+                'average_income'       => $vacancy->average_income,
+                'special_conditions'   => $vacancy->special_conditions,
+                'requirements'         => $vacancy->requirements,
+                'candidate_gender'     => $vacancy->candidate_gender,
+                'donor_companies'      => $vacancy->donor_companies,
+                'interview_format'     => $vacancy->interview_format,
+                'deadline_reason'      => $vacancy->deadline_reason,
+                'reserve'              => $vacancy->reserve,
+            ],
+            'clients' => $clients,
+        ]);
+    }
+
+    public function update(Request $request, Vacancy $vacancy)
+    {
+        $validated = $request->validate([
+            'title'                => 'required|string|max:255',
+            'confidential'         => 'boolean',
+            'department'           => 'nullable|string|max:255',
+            'staffing_unit'        => 'nullable|string|max:255',
+            'vacancy_category'     => 'nullable|string|max:255',
+            'region'               => 'nullable|string|max:255',
+            'status'               => 'required|in:open,closed,paused,draft',
+            'opening_date'         => 'nullable|date',
+            'planned_closing_date' => 'nullable|date',
+            'planned_closing_days' => 'nullable|integer|min:0',
+            'client_id'            => 'nullable|exists:clients,id',
+            'description'          => 'nullable|string',
+            'comment'              => 'nullable|string',
+            'work_address'         => 'required|string|max:255',
+            'mvz_code'             => 'required|string|max:255',
+            'work_schedule'        => 'required|string|max:255',
+            'opening_reason'       => 'required|string|max:255',
+            'fixed_salary'         => 'required|string|max:255',
+            'average_income'       => 'required|string|max:255',
+            'special_conditions'   => 'required|string|max:255',
+            'requirements'         => 'required|string',
+            'candidate_gender'     => 'required|string|max:50',
+            'donor_companies'      => 'required|string|max:255',
+            'interview_format'     => 'required|string|max:255',
+            'deadline_reason'      => 'nullable|string|max:255',
+            'reserve'              => 'required|string|max:255',
+        ]);
+
+        $validated['confidential'] = $request->boolean('confidential');
+
+        $vacancy->update($validated);
+
+        return redirect()->route('vacancies.show', $vacancy)
+            ->with('success', 'Вакансия успешно обновлена.');
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

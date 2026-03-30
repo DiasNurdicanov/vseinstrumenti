@@ -123,8 +123,10 @@ export default function VacanciesIndex({ vacancies, clients, departments, filter
                 .btn-apply:hover{background:#2563eb}
                 .btn-reset-filter{background:none;border:none;font-size:13px;color:#6b7280;cursor:pointer;padding:0;font-family:inherit}
                 .btn-reset-filter:hover{color:#111}
-                .site-link{font-size:12px;color:#3b82f6;text-decoration:none;white-space:nowrap}
+                .site-link{font-size:12px;color:#3b82f6;text-decoration:none;white-space:nowrap;display:block;margin-bottom:4px}
                 .site-link:hover{text-decoration:underline}
+                .edit-link{font-size:12px;color:#6b7280;text-decoration:none;white-space:nowrap;display:block}
+                .edit-link:hover{color:#111;text-decoration:underline}
             `}</style>
 
       {/* Top bar */}
@@ -229,14 +231,13 @@ export default function VacanciesIndex({ vacancies, clients, departments, filter
                       <tr key={v.id}>
                         {/* Название */}
                         <td>
-                          <div className="vac-name">{v.title}</div>
+                          <Link href={`/vacancies/${v.id}`} className="vac-name" style={{ textDecoration: 'none' }}>{v.title}</Link>
                           {(v.fixed_salary || v.average_income) && (
                             <div className="vac-sub">
                               {v.fixed_salary ?? '—'} / {v.average_income ?? '0'}
                             </div>
                           )}
                           {v.region && <div className="vac-pubs">{v.region}</div>}
-                          <Link href={`/vacancies/${v.id}`} className="site-link">Посмотреть на сайте</Link>
                         </td>
 
                         {/* Статус */}
@@ -283,11 +284,13 @@ export default function VacanciesIndex({ vacancies, clients, departments, filter
                               <div className="cand-new">Новые: <span className="cand-num">0</span></div>
                               <div className="cand-all">Все: <span className="cand-num">0</span></div>
                             </div>
-                            <div className="cell-actions">
-                              <button className="cell-action-btn" title="Редактировать">✎</button>
-                              <button className="cell-action-btn" title="Ещё">•••</button>
-                            </div>
                           </div>
+                        </td>
+
+                        {/* Действия */}
+                        <td>
+                          <Link href={`/vacancies/${v.id}`} className="site-link">Посмотреть</Link>
+                          <Link href={`/vacancies/${v.id}/edit`} className="edit-link">Редактировать</Link>
                         </td>
                       </tr>
                     ))}
